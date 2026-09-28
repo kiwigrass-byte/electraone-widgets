@@ -1,4 +1,4 @@
--- electraone-widgets · primitive: slider
+-- electraone-widgets . primitive: slider
 -- Linear fader: thin track with a rectangular handle marking the current
 -- position. Style = synth-panel linear pot, optional millimetre-ruler
 -- style ticks on both sides of the track.
@@ -71,7 +71,7 @@ local function slider(x, y, w, h, value, opts)
     end
     for dx = -1, 1 do graphics.drawLine(trackX + dx, y0, trackX + dx, y1) end
 
-    -- Ruler ticks — both sides, close to track, every 5th longer + thicker
+    -- Ruler ticks -- both sides, close to track, every 5th longer + thicker
     if ticks and ticks > 0 then
       graphics.setColor(Theme.TEXT_DIM)
       for i = 0, ticks do
@@ -116,7 +116,7 @@ local function slider(x, y, w, h, value, opts)
     end
     for dy = -1, 1 do graphics.drawLine(x0, trackY + dy, x1, trackY + dy) end
 
-    -- Ruler ticks — above and below track
+    -- Ruler ticks -- above and below track
     if ticks and ticks > 0 then
       graphics.setColor(Theme.TEXT_DIM)
       for i = 0, ticks do

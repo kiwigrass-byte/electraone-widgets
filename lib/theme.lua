@@ -1,4 +1,4 @@
--- electraone-widgets · Theme v0.3
+-- electraone-widgets . Theme v0.3
 -- Modern visual language for Electra One MK2 widgets.
 -- Classic pro-audio combination: cool slate neutrals (echoes the MK2's
 -- brushed aluminum anodised case) + warm amber-terracotta signature
@@ -13,22 +13,22 @@ Theme = Theme or {}
 -- Widgets declare which Theme version they were written against via
 --   Theme.require("0.3")
 -- at the top of their widget.lua. Bumps to this number signal a breaking
--- change in the palette, primitive APIs, or both — widgets pinned to an
+-- change in the palette, primitive APIs, or both -- widgets pinned to an
 -- older version should be audited before they render on the new Theme.
 Theme.VERSION = "0.3"
 
 function Theme.require(expected)
   if Theme.VERSION ~= expected then
     error(string.format(
-      "This widget was written for Theme v%s but the loaded Theme is v%s — review widget.lua for API changes.",
+      "This widget was written for Theme v%s but the loaded Theme is v%s - review widget.lua for API changes.",
       tostring(expected), tostring(Theme.VERSION)))
   end
 end
 
--- ========== Palette — RGB888 (24-bit) ==========
+-- ========== Palette -- RGB888 (24-bit) ==========
 -- The firmware (4.1.4+) accepts 0xRRGGBB values directly and converts to
 -- the panel's native RGB565 internally. The release notes for v4.1.4
--- specifically fixed the RGB888→RGB565 translation for preset bank
+-- specifically fixed the RGB888->RGB565 translation for preset bank
 -- colours, confirming RGB888 is the expected input format.
 --
 -- Neutrals: cool slate hierarchy, blue-undertoned. Matches the MK2's
@@ -53,7 +53,7 @@ Theme.NEUTRAL_ACCENT = 0x6B7384   -- cool grey-blue: disabled
 
 -- ========== Drawing helpers ==========
 -- Thin wrappers around graphics.* so widget code stays declarative.
--- IMPORTANT: do NOT cache `graphics` to a local upvalue — the firmware
+-- IMPORTANT: do NOT cache `graphics` to a local upvalue -- the firmware
 -- (and our IIFE-free bundle layout) doesn't reliably keep upvalues alive
 -- across paint dispatch. Reference `graphics` directly inside each helper.
 
@@ -93,7 +93,7 @@ function Theme.card(x, y, w, h)
   Theme.outline(x, y, w, h, Theme.BORDER)
 end
 
--- Clear the tile with canvas base — call first in paint callbacks.
+-- Clear the tile with canvas base -- call first in paint callbacks.
 function Theme.clear(w, h)
   Theme.rect(0, 0, w, h, Theme.CANVAS)
 end

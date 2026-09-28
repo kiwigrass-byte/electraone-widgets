@@ -1,21 +1,21 @@
 -- Widget: metronomes
--- Metronomes — visual tempo references
+-- Metronomes -- visual tempo references
 -- Original author: Dave House
 -- Source: https://app.electra.one/preset/CBRYC9JppeZUzOqgCvBT
 -- Imported: 2026-04-15 from Firestore. License at source: none specified.
 -- Removal / relicensing: see NOTICE.md at repo root.
 
 ------------------------------------------------------------------
---  Electra-One Mk-2 · SIX Bouncing Balls · v12.0
---  • master RUN  (bRun)
---  • RESET button (bReset) parks all balls at the left wall
---  • NEW: global speed-multiplier slider  (gSpeed)
---      – S-ID  gSpeed   range 1…100   default 50
---      – value 1   → ×0.1   (10× slower)
---        value 50  → ×1     (exact pot settings)
---        value 100 → ×10    (10× faster)
---  • per-ball  Chan · Note · Speed · Vel-L · Vel-R
---  • 6 lanes, canvas ID 1 (“bGfx”) 480×480
+--  Electra-One Mk-2 . SIX Bouncing Balls . v12.0
+--  * master RUN  (bRun)
+--  * RESET button (bReset) parks all balls at the left wall
+--  * NEW: global speed-multiplier slider  (gSpeed)
+--      - S-ID  gSpeed   range 1...100   default 50
+--      - value 1   -> x0.1   (10x slower)
+--        value 50  -> x1     (exact pot settings)
+--        value 100 -> x10    (10x faster)
+--  * per-ball  Chan . Note . Speed . Vel-L . Vel-R
+--  * 6 lanes, canvas ID 1 ("bGfx") 480x480
 ------------------------------------------------------------------
 
 ---------------- constants ---------------------------------------
@@ -29,7 +29,7 @@ local MIDI_PORT = 1
 ------------------------------------------------------------------
 local function clamp(v,a,b)  return (v<a) and a or (v>b) and b or v end
 local function knobToMs(k)   return 50 + (k/127)*(5000-50) end
--- gSpeed 1…100  → multiplier 0.1…10   (log10 curve, symmetrical)
+-- gSpeed 1...100  -> multiplier 0.1...10   (log10 curve, symmetrical)
 local function gKnobToMul(k) return 10 ^ ((k-50)/50) end
 
 ------------------------------------------------------------------
@@ -44,7 +44,7 @@ local balls = {
   {col=0xFFFF,row=6,pos=0,dir=1,ch=0,note=79,spdKn=64,velL=100,velR=100},
 }
 
--- global multiplier (GUI default 50 = ×1)
+-- global multiplier (GUI default 50 = x1)
 local gMulKn = 50
 local gMul   = 1.0            -- effective multiplier
 
@@ -69,7 +69,7 @@ end
 ------------------------------------------------------------------
 -- GLOBAL SPEED-MULTIPLIER  (new slider callback)
 ------------------------------------------------------------------
-function gSpeed(_,v)              -- v 1…100
+function gSpeed(_,v)              -- v 1...100
   gMulKn = clamp(v,1,100)
   gMul   = gKnobToMul(gMulKn)
   for _,b in ipairs(balls) do refreshStep(b) end
@@ -98,8 +98,7 @@ end
 ------------------------------------------------------------------
 -- TIMER
 ------------------------------------------------------------------
-timer.enable(); timer.setPeriod(TICK_MS)
-function timer.onTick()
+function metroTick()
   if runMaster~=1 then return end
   for _,b in ipairs(balls) do
     b.pos=b.pos+b.dir*b.step
@@ -109,6 +108,8 @@ function timer.onTick()
   end
   if canvas then canvas:repaint() end
 end
+
+schedule.every(TICK_MS, metroTick)
 
 ------------------------------------------------------------------
 -- PAINTER

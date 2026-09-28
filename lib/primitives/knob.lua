@@ -1,5 +1,5 @@
--- electraone-widgets · primitive: knob
--- Rotary knob with ring gauge. 270° sweep from 7 o'clock to 5 o'clock.
+-- electraone-widgets . primitive: knob
+-- Rotary knob with ring gauge. 270deg sweep from 7 o'clock to 5 o'clock.
 -- Requires Theme (from lib/theme.lua) to be loaded first.
 --
 -- Usage:
@@ -20,8 +20,8 @@ local function knob(x, y, size, value, opts)
   local label = opts.label
   local v = math.max(0, math.min(1, value or 0))
 
-  local startA = math.pi * 0.75                -- 135° (7 o'clock)
-  local sweep  = math.pi * 1.5                 -- 270°
+  local startA = math.pi * 0.75                -- 135deg (7 o'clock)
+  local sweep  = math.pi * 1.5                 -- 270deg
   local segs   = 56
 
   -- Helper: draw an arc segment set at radius `rr` between two normalised t
@@ -41,12 +41,12 @@ local function knob(x, y, size, value, opts)
     end
   end
 
-  -- Track (dim background ring) — 3-pass for ≈3px thickness
+  -- Track (dim background ring) -- 3-pass for ~3px thickness
   arc(r,     0, 1, Theme.ELEVATED)
   arc(r - 1, 0, 1, Theme.ELEVATED)
   arc(r - 2, 0, 1, Theme.ELEVATED)
 
-  -- Value arc (coloured) — 4-pass for ≈4px thickness, more dominant
+  -- Value arc (coloured) -- 4-pass for ~4px thickness, more dominant
   if v > 0 then
     arc(r,     0, v, color)
     arc(r - 1, 0, v, color)
@@ -63,7 +63,7 @@ local function knob(x, y, size, value, opts)
   -- Indicator: thick radial line from centre to the ring, in accent colour.
   -- Drawn as 3 parallel lines offset perpendicularly for pseudo-stroke-weight.
   -- Firmware requires integer coordinates for drawLine, so floor the final pixel
-  -- positions (the float math for direction is fine — only the args to drawLine
+  -- positions (the float math for direction is fine -- only the args to drawLine
   -- need to be integers).
   local indA = startA + sweep * v
   local nx, ny = -math.sin(indA), math.cos(indA)    -- perpendicular unit

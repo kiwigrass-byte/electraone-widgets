@@ -54,7 +54,7 @@ local meterControl = controls.get(1)
 local function simulate()
   t = t + 0.04
   local env       = -20 + 8 * math.sin(t * 0.25)                   -- slow, -28..-12 dBFS
-  local midMod    = 2 * math.sin(t * 1.7)                          -- ±2 dB gentle ripple
+  local midMod    = 2 * math.sin(t * 1.7)                          -- +/-2 dB gentle ripple
   local transient = (math.random() < 0.05) and (2 + math.random() * 6) or 0
   local instant   = env + midMod + transient
 
@@ -69,7 +69,7 @@ local function simulate()
 
   -- True peak (instantaneous + small headroom, decay toward the noise floor)
   local tpInstant = instant + 1.5 + (transient > 0 and 2 or 0)
-  -- Linear decay: drop 2 dB per tick (additive, not multiplicative — dB is
+  -- Linear decay: drop 2 dB per tick (additive, not multiplicative -- dB is
   -- logarithmic so multiplying a negative value doesn't mean what you'd
   -- think). Rising takes precedence over decay.
   tpCur = math.max(tpCur - 2, tpInstant)
@@ -167,7 +167,7 @@ function paintMeter(control)
   -- True Peak meter card
   paintMeterCard(TP, tpCur, tpMax, tpColor(tpCur), TP_CEILING)
 
-  -- Stats panel — big numbers + small sub-readouts
+  -- Stats panel -- big numbers + small sub-readouts
   Theme.rect(STATS_X, STATS_Y, STATS_W, METER_H, Theme.SURFACE)
   Theme.outline(STATS_X, STATS_Y, STATS_W, METER_H, Theme.BORDER)
 
@@ -220,7 +220,7 @@ function paintMeter(control)
 
   -- Footer hint
   graphics.setColor(Theme.TEXT_DIM)
-  graphics.print(20, 510, "MODE cycles target · RESET zeros max / integrated · HOLD freezes true-peak", 9999, LEFT)
+  graphics.print(20, 510, "MODE cycles target . RESET zeros max / integrated . HOLD freezes true-peak", 9999, LEFT)
 end
 
 -- ===== Touch =====
@@ -270,7 +270,7 @@ function potMeter(control, potEvent)
 end
 
 -- ===== Timer =====
-function timer.onTick()
+function tapeMeterTick()
   local dt = 40
   if resetFlash > 0 then resetFlash = resetFlash - dt end
   simulate()
@@ -290,7 +290,6 @@ function preset.onLoad()
   lufsMin = lufsShort
   lufsMax = lufsShort
   lra = 0
-  timer.setPeriod(40)
-  timer.enable()
+  schedule.every(40, tapeMeterTick)
   meterControl:repaint()
 end

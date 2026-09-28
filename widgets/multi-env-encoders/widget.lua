@@ -1,5 +1,5 @@
 -- Widget: multi env encoders
--- Multi-env encoders — multi-stage envelope
+-- Multi-env encoders -- multi-stage envelope
 -- Original author: Thomas Moravansky (Electra One co-founder)
 -- Source: https://app.electra.one/preset/ZChNPfheMT4kuBe79RXG
 -- Imported: 2026-04-15 from Firestore. License at source: none specified.

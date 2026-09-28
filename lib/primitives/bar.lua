@@ -1,5 +1,5 @@
--- electraone-widgets · primitive: bar
--- Horizontal value bar with optional label. Minimal — for linear values
+-- electraone-widgets . primitive: bar
+-- Horizontal value bar with optional label. Minimal -- for linear values
 -- where a rotary knob would be too heavy.
 --
 -- Usage:

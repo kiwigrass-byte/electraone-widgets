@@ -1,4 +1,4 @@
--- electraone-widgets · primitive: grid
+-- electraone-widgets . primitive: grid
 -- Step-sequencer / drum-matrix tile grid. Each cell shows on/off state,
 -- optional velocity intensity, and the currently-playing step gets a
 -- prominent highlight bar.
@@ -14,9 +14,9 @@
 --     },
 --   })
 -- `cells[idx]` where idx = (row-1) * cols + col:
---   nil / false         → off
---   true                → full velocity
---   number 0..1         → velocity fraction
+--   nil / false         -> off
+--   true                -> full velocity
+--   number 0..1         -> velocity fraction
 
 local function grid(x, y, w, h, cols, rows, cells, opts)
   opts = opts or {}
@@ -31,7 +31,7 @@ local function grid(x, y, w, h, cols, rows, cells, opts)
 
   for r = 1, rows do
     local rowDisabled = disabledRows[r]
-    -- Muted palette for disabled rows — keeps the pattern visible but reads
+    -- Muted palette for disabled rows -- keeps the pattern visible but reads
     -- as "not playing". Cool neutral contrasts the warm accent of live rows.
     local rowColor    = rowDisabled and Theme.NEUTRAL_ACCENT or color
     local rowColorDim = rowDisabled and Theme.BORDER         or colorDim
@@ -48,7 +48,7 @@ local function grid(x, y, w, h, cols, rows, cells, opts)
       if state == true then intensity = 1
       elseif type(state) == "number" then intensity = math.max(0, math.min(1, state)) end
 
-      -- Base cell — SURFACE by default; ELEVATED on the active-column lane,
+      -- Base cell -- SURFACE by default; ELEVATED on the active-column lane,
       -- but only if the row is live. Disabled rows stay fully static so no
       -- "traveling" highlight leaks through.
       local bg = (isActiveCell and not rowDisabled) and Theme.ELEVATED or Theme.SURFACE

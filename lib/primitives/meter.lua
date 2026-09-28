@@ -1,4 +1,4 @@
--- electraone-widgets · primitive: meter
+-- electraone-widgets . primitive: meter
 -- VU-style meter with graduated tick marks. Horizontal or vertical.
 -- Requires Theme.
 --

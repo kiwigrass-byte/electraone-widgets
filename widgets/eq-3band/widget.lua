@@ -2,8 +2,8 @@
 -- Low-shelf + mid-peak + high-shelf with a live magnitude response curve.
 -- Uses the Audio EQ Cookbook (RBJ) biquad formulas to compute real filter
 -- coefficients, then evaluates the transfer function at 80 log-spaced
--- points between 20 Hz and 20 kHz. No audio processing — just the
--- analytical |H(e^jω)| — so redraw stays cheap on MK2 hardware.
+-- points between 20 Hz and 20 kHz. No audio processing -- just the
+-- analytical |H(e^jw)| -- so redraw stays cheap on MK2 hardware.
 --
 -- Band centre frequencies are constrained to keep LOW < MID < HIGH at all
 -- times (half-octave minimum separation) so you can't accidentally fold
@@ -25,8 +25,8 @@ local KNOB_OFFSETS = { 22, 122, 222 }
 
 -- ===== DSP constants =====
 local FS = 48000                -- Sample rate assumed for the curve shape
-local GAIN_DB_RANGE = 18         -- ±18 dB at knob extremes
-local GRAPH_DB_RANGE = 24        -- graph shows ±24 dB so peak bumps fit
+local GAIN_DB_RANGE = 18         -- +/-18 dB at knob extremes
+local GRAPH_DB_RANGE = 24        -- graph shows +/-24 dB so peak bumps fit
 
 -- ===== State =====
 -- Each band: { name, type, freq(0..1), gain(0..1), q(0..1) }
@@ -43,14 +43,14 @@ local FREQ_MARGIN = 0.08         -- min half-octave gap between adjacent bands
 
 local eqControl = controls.get(1)
 
--- ===== Knob → physical value mapping =====
+-- ===== Knob -> physical value mapping =====
 local function hz(v)
   -- 20 Hz .. 20 kHz log-frequency
   return 20 * 10 ^ (v * 3)
 end
 
 local function gainDb(v)
-  -- symmetric ±GAIN_DB_RANGE around 0 dB at v=0.5
+  -- symmetric +/-GAIN_DB_RANGE around 0 dB at v=0.5
   return (v - 0.5) * 2 * GAIN_DB_RANGE
 end
 
@@ -114,8 +114,8 @@ local function highShelfCoeffs(fc, Q, dbG)
 end
 
 -- ===== Analytical magnitude response =====
--- |H(e^jω)|² = |b0 + b1·e^-jω + b2·e^-2jω|² / |a0 + a1·e^-jω + a2·e^-2jω|²
--- then convert to dB. No sample processing — reads true biquad magnitude.
+-- |H(e^jw)|^2 = |b0 + b1.e^-jw + b2.e^-2jw|^2 / |a0 + a1.e^-jw + a2.e^-2jw|^2
+-- then convert to dB. No sample processing -- reads true biquad magnitude.
 local function biquadDb(b0, b1, b2, a0, a1, a2, omega)
   local c1, s1 =  math.cos(omega),     -math.sin(omega)
   local c2, s2 =  math.cos(2 * omega), -math.sin(2 * omega)
@@ -240,7 +240,7 @@ function paintEQ(control)
   Theme.graph(GRAPH_X, GRAPH_Y, GRAPH_W, GRAPH_H, curvePoints(), {
     color = Theme.ACCENT,
     fill = true,
-    grid = 8,              -- 0, ±6, ±12, ±18 dB rows (±24 range)
+    grid = 8,              -- 0, +/-6, +/-12, +/-18 dB rows (+/-24 range)
     baseline = 0.5,
   })
 

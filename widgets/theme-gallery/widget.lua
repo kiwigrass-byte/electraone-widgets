@@ -1,5 +1,5 @@
 -- Widget: Theme Gallery
--- Dev reference — visualises the whole Theme palette + sample typography.
+-- Dev reference -- visualises the whole Theme palette + sample typography.
 -- Paste lib/theme.lua at top for device deployment; the emulator pre-loads it.
 
 Theme.require("0.3")
@@ -47,7 +47,7 @@ function paintGallery(control)
   Theme.clear(W, H)
 
   -- Header
-  Theme.text(20, 14, "THEME v0.3 — electraone-widgets", Theme.TEXT)
+  Theme.text(20, 14, "THEME v0.3 - electraone-widgets", Theme.TEXT)
   Theme.text(20, 30, "Cool slate chrome (matches MK2 case) + warm amber accent (matches brand)", Theme.TEXT_DIM)
   Theme.line(20, 48, W - 20, 48, Theme.BORDER)
 
@@ -59,8 +59,8 @@ function paintGallery(control)
   Theme.text(20, 200, "ACCENTS", Theme.TEXT_DIM)
   paintSwatchRow(20, 216, ACCENTS, 120, 60, 12)
 
-  -- Card showcase — 3 sample tiles
-  Theme.text(20, 340, "CARD PRIMITIVE — sample widget compositions", Theme.TEXT_DIM)
+  -- Card showcase -- 3 sample tiles
+  Theme.text(20, 340, "CARD PRIMITIVE - sample widget compositions", Theme.TEXT_DIM)
 
   -- card 1: value in ACCENT (normal)
   Theme.card(20, 360, 200, 100)
@@ -74,7 +74,7 @@ function paintGallery(control)
   Theme.card(240, 360, 200, 100)
   Theme.text(252, 378, "RESONANCE", Theme.TEXT_DIM)
   Theme.text(252, 402, "+4.2", Theme.ALERT)
-  Theme.text(252, 436, "dB — limiting", Theme.TEXT_DIM)
+  Theme.text(252, 436, "dB - limiting", Theme.TEXT_DIM)
   Theme.rect(252, 446, 120, 4, Theme.ELEVATED)
   Theme.rect(252, 446, 118, 4, Theme.ALERT)
 
@@ -90,15 +90,15 @@ function paintGallery(control)
   Theme.card(680, 360, 200, 100)
   Theme.text(692, 378, "THRESHOLD", Theme.TEXT_DIM)
   Theme.text(692, 402, "-18", Theme.POSITIVE)
-  Theme.text(692, 436, "dB — clean", Theme.TEXT_DIM)
+  Theme.text(692, 436, "dB - clean", Theme.TEXT_DIM)
   Theme.rect(692, 446, 120, 4, Theme.ELEVATED)
   Theme.rect(692, 446, 45, 4, Theme.POSITIVE)
 
   -- Footer typography sample
   Theme.line(20, 480, W - 20, 480, Theme.BORDER)
-  Theme.text(20, 492, "Typography — labels TEXT_DIM, values in semantic accent, chrome TEXT.", Theme.TEXT_DIM)
+  Theme.text(20, 492, "Typography - labels TEXT_DIM, values in semantic accent, chrome TEXT.", Theme.TEXT_DIM)
   Theme.text(20, 508, "No gradients (LCD flattens them), 2px strokes, warm-tilted greys.", Theme.TEXT_DIM)
-  Theme.text(20, 524, "Primary reads in warm off-white #F0E9DF — never harsh pure white.", Theme.TEXT_DIM)
+  Theme.text(20, 524, "Primary reads in warm off-white #F0E9DF - never harsh pure white.", Theme.TEXT_DIM)
 end
 
 function preset.onLoad()

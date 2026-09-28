@@ -1,5 +1,5 @@
 -- Widget: Mini Cube LFO
--- Mini Cube LFO — compact variant of Cube LFO
+-- Mini Cube LFO -- compact variant of Cube LFO
 -- Original author: Martin Pavlas (Electra One creator)
 -- Source: https://app.electra.one/preset/ZS5BSFRpk5L0dTXRVkvb
 -- Imported: 2026-04-15 from Firestore. License at source: none specified.
@@ -118,8 +118,7 @@ function preset.onLoad()
     cubeControl:setPaintCallback(paintCubeControl)
 
     -- Configure and enable the timer
-    timer.setPeriod(REFRESH_RATE)
-    timer.enable()
+    schedule.every(REFRESH_RATE, miniCubeTick)
 
     uiControls.cube.stepX = 0.01
 end
@@ -143,7 +142,7 @@ end
 
 -- Handle the timer callback
 --
-function timer.onTick()
+function miniCubeTick()
     cubeControl:update()
     sendOutboundCcMessages(uiControls.cube)
     cubeControl:repaint()

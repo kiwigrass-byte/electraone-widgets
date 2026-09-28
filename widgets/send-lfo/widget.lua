@@ -1,5 +1,5 @@
 -- Widget: Send LFO
--- Send LFO — LFO with CC send visualization
+-- Send LFO -- LFO with CC send visualization
 -- Original author: Martin Pavlas (Electra One creator)
 -- Source: https://app.electra.one/preset/hXZd5qXpoMx82gIz6qWP
 -- Imported: 2026-04-15 from Firestore. License at source: none specified.
@@ -35,11 +35,11 @@ function preset.onLoad()
     scopeControl:repaint()
 end
 
--- Sample usage (assuming timer updates every 1 ms)
+-- Sample usage (the scheduler fires every 10 ms)
 local timerInterval = 0.01  -- 1 ms in seconds
 
--- Enable timer
-timer.setPeriod (10)
+-- Scheduler handle, non-nil while the LFO is running
+local lfoJob = nil
 
 -- Acquire a Data pipe
 local pipeOutput = pipe.acquire("output");
@@ -86,8 +86,8 @@ function getLFOSine()
     return value
 end
 
--- timer callback
-function timer.onTick ()
+-- scheduler callback
+function sendLfoTick ()
     updateLFO(timerInterval)
     local lfoSawtooth = getLFOSawtooth()
     local lfoSquare   = getLFOSquare()
@@ -116,12 +116,13 @@ end
 
 -- LFO state control
 function run(valueObject, value)
-    timer.enable()
+    if lfoJob then schedule.cancel(lfoJob) end
+    lfoJob = schedule.every(10, sendLfoTick)
     info.setText("Running")
 end
 
 function stop(valueObject, value)
-    timer.disable()
+    if lfoJob then schedule.cancel(lfoJob); lfoJob = nil end
     info.setText("")
 end
 

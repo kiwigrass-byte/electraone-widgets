@@ -1,10 +1,10 @@
--- electraone-widgets · primitive: button
--- Console-tile style toggle / momentary button — SSL-inspired. The body
+-- electraone-widgets . primitive: button
+-- Console-tile style toggle / momentary button -- SSL-inspired. The body
 -- is a fixed dark slab (ELEVATED) wrapped in a machined-metal double-
 -- stroke frame, carrying an LED window across the top that lights up in
 -- a semantic colour when state is true. For momentary presses, pass
 -- `flashing = true` and the whole body flips to WARNING amber with the
--- label inverted to CANVAS black — a hardware "pressed hard" feel.
+-- label inverted to CANVAS black -- a hardware "pressed hard" feel.
 -- Requires Theme.
 --
 -- Usage:
@@ -41,11 +41,11 @@ local function button(x, y, w, h, opts)
   Theme.outline(x,     y,     w,     h,     Theme.BORDER)
   Theme.outline(x + 2, y + 2, w - 4, h - 4, Theme.BORDER)
 
-  -- Inner body — brushed-steel ELEVATED fill
+  -- Inner body -- brushed-steel ELEVATED fill
   local bx, by, bw, bh = x + 3, y + 3, w - 6, h - 6
   Theme.rect(bx, by, bw, bh, Theme.ELEVATED)
 
-  -- Top LED window — 10px tall strip (scaled for compact button sizes)
+  -- Top LED window -- 10px tall strip (scaled for compact button sizes)
   local winH = 10
   local winColor = state and color or Theme.CANVAS
   Theme.rect(bx, by, bw, winH, winColor)
@@ -54,7 +54,7 @@ local function button(x, y, w, h, opts)
   graphics.drawLine(math.floor(bx), math.floor(by + winH),
                     math.floor(bx + bw - 1), math.floor(by + winH))
 
-  -- Label — centred in the area below the window, double-drawn for weight
+  -- Label -- centred in the area below the window, double-drawn for weight
   local labelAreaY = by + winH + 1
   local labelAreaH = bh - winH - 1
   local tw = #label * 6

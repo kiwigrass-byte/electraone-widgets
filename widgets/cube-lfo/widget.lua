@@ -1,5 +1,5 @@
 -- Widget: Cube LFO
--- Cube LFO — 3D cube-vertex projection LFO visualizer
+-- Cube LFO -- 3D cube-vertex projection LFO visualizer
 -- Original author: Martin Pavlas (Electra One creator)
 -- Source: https://app.electra.one/preset/OE5cAkqSG7tdrTa28nNs
 -- Imported: 2026-04-15 from Firestore. License at source: none specified.
@@ -124,9 +124,8 @@ function preset.onLoad()
     -- Register the paint callback
     cubeControl:setPaintCallback(paintCubeControl)
 
-    -- Configure and enable the timer
-    timer.setPeriod(REFRESH_RATE)
-    timer.enable()
+    -- Drive the animation from the scheduler
+    schedule.every(REFRESH_RATE, cubeLfoTick)
 end
 
 -- Handle Grid changes
@@ -146,9 +145,9 @@ function parameterMap.onChange(valueObjects, origin, midiValue)
     end
 end
 
--- Handle the timer callback
+-- Animation step, driven by schedule.every()
 --
-function timer.onTick()
+function cubeLfoTick()
     cubeControl:update()
     sendOutboundCcMessages(uiControls.cube)
     cubeControl:repaint()

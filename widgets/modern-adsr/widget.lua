@@ -1,6 +1,6 @@
 -- Widget: Modern ADSR
 -- Flat/modern replacement for the native dx7envelope tile. Single custom
--- tile covers the whole page — everything is drawn with Theme primitives.
+-- tile covers the whole page -- everything is drawn with Theme primitives.
 -- Touch drag on a knob region changes its value; each knob writes to its
 -- own virtual parameter via parameterMap.set so downstream synths can
 -- wire CC mapping to it.
@@ -109,8 +109,8 @@ function paintEnvelope(control)
   Theme.text(20, 12, "ENVELOPE", Theme.TEXT_DIM)
   Theme.line(20, 30, W - 20, 30, Theme.BORDER)
 
-  -- Curve (top half) — compute section-transition xs so the graph primitive
-  -- can draw vertical edges from baseline up to the curve at A→D, D→S, S→R.
+  -- Curve (top half) -- compute section-transition xs so the graph primitive
+  -- can draw vertical edges from baseline up to the curve at A->D, D->S, S->R.
   local a, d, s, r = adsr.a, adsr.d, adsr.s, adsr.r
   local hold = 0.20
   local total = a + d + hold + r

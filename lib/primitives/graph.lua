@@ -1,4 +1,4 @@
--- electraone-widgets · primitive: graph
+-- electraone-widgets . primitive: graph
 -- Polyline plot of normalised points inside a rectangle. Useful for
 -- envelope shapes, EQ curves, LFO traces, waveform thumbnails.
 -- Requires Theme.
@@ -38,7 +38,7 @@ local function graph(x, y, w, h, points, opts)
 
   if not points or #points < 2 then return end
 
-  -- Map normalised point → screen pixel (flip y: 0=bottom, 1=top)
+  -- Map normalised point -> screen pixel (flip y: 0=bottom, 1=top)
   local function toScreen(p)
     return x + p[1] * w, y + h - p[2] * h
   end
@@ -47,8 +47,8 @@ local function graph(x, y, w, h, points, opts)
   local sp = {}
   for i, p in ipairs(points) do sp[i] = { toScreen(p) } end
 
-  -- Solid uniform fill under the curve — one fillRect per integer column.
-  -- Integer coords avoid the sub-pixel "dégradé" artifact of drawLine stacking.
+  -- Solid uniform fill under the curve -- one fillRect per integer column.
+  -- Integer coords avoid the sub-pixel "degrade" artifact of drawLine stacking.
   if fill then
     graphics.setColor(color)
     local baseY = math.floor(y + h - baseline * h)
@@ -70,13 +70,13 @@ local function graph(x, y, w, h, points, opts)
 
   -- Contour trace + section markers share the same colour. When the area
   -- is filled, render in ACCENT_DIM (darker copper) for an engraved-edge
-  -- look on top of the accent fill — stays in the warm family instead of
+  -- look on top of the accent fill -- stays in the warm family instead of
   -- going cool off-white which reads dingy on orange. Otherwise use the
   -- caller's trace colour.
   local traceColor = fill and Theme.ACCENT_DIM or color
   graphics.setColor(traceColor)
 
-  -- Optional section markers — vertical 2px lines from baseline up to the
+  -- Optional section markers -- vertical 2px lines from baseline up to the
   -- curve at each requested x (never above the curve, never above the fill).
   if opts.markers then
     local baseY = math.floor(y + h - baseline * h)
@@ -98,7 +98,7 @@ local function graph(x, y, w, h, points, opts)
     end
   end
 
-  -- Contour trace (2px thick) — drawn last so it sits on top of markers.
+  -- Contour trace (2px thick) -- drawn last so it sits on top of markers.
   for i = 1, #sp - 1 do
     local x0, y0 = sp[i][1], sp[i][2]
     local x1, y1 = sp[i + 1][1], sp[i + 1][2]

@@ -1,4 +1,4 @@
--- electraone-widgets · primitive: led
+-- electraone-widgets . primitive: led
 -- Status indicator dot with optional glow halo when on.
 --
 -- Usage:
@@ -16,7 +16,7 @@ local function led(cx, cy, on, opts)
   local label = opts.label
 
   if on then
-    -- Glow halo — slightly larger, same colour but we rely on the MK2's
+    -- Glow halo -- slightly larger, same colour but we rely on the MK2's
     -- lack of anti-aliasing to give it that blown-pixel feel.
     graphics.setColor(color)
     graphics.fillCircle(cx, cy, r + 2)

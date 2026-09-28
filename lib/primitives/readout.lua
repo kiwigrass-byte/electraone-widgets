@@ -1,4 +1,4 @@
--- electraone-widgets · primitive: readout
+-- electraone-widgets . primitive: readout
 -- Typography-driven value display. Dominant value in primary text, label
 -- above in dim grey, unit suffix in dim grey on the right of the value.
 -- Requires Theme.
@@ -9,7 +9,7 @@
 --     value = "5,280",       -- large primary value (any string)
 --     unit  = "Hz",          -- optional dim suffix
 --     color = Theme.ACCENT,  -- value colour (default TEXT)
---     align = "l" | "r",     -- text anchor at (x,y) — default "l"
+--     align = "l" | "r",     -- text anchor at (x,y) - default "l"
 --   })
 
 local function readout(x, y, opts)

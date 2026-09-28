@@ -1,12 +1,12 @@
--- ===== note-list-16 · widget revision 149 =====
+-- ===== note-list-16 . widget revision 149 =====
 WIDGET_REV = "149"
 
--- Widget: 16-Step Note List — Waldorf Q-style reusable step list.
+-- Widget: 16-Step Note List -- Waldorf Q-style reusable step list.
 -- Generalised to N lanes (2 ships by default). Each lane = one custom
 -- tile, one pot, 16 steps.
 --
 -- Pot rotation: in "navigate" mode steps through 1..16; in "edit" mode
--- changes the selected step's value. Pot click (TOUCH→RELEASE without
+-- changes the selected step's value. Pot click (TOUCH->RELEASE without
 -- rotation) toggles between navigate and edit modes. Double-click on the
 -- pot mutes/unmutes the selected step.
 -- Tap a cell to select it directly. Drag vertically to edit the value.
@@ -21,18 +21,18 @@ Theme.require("0.3")
 -- ===== Per-tile state (keyed by ctrl:getId() = 1 or 2) =====
 
 -- Empirically (firmware 4.1.4): each custom tile receives events from
--- ONE physical encoder only — the col-0 pot of the OPPOSITE row. Tile
--- in slot 1 (top) → pot in row 2 col 0 (ev.id=6). Tile in slot 7
--- (bottom) → pot in row 1 col 0 (ev.id=0). The `inputs` array in the
+-- ONE physical encoder only -- the col-0 pot of the OPPOSITE row. Tile
+-- in slot 1 (top) -> pot in row 2 col 0 (ev.id=6). Tile in slot 7
+-- (bottom) -> pot in row 1 col 0 (ev.id=0). The `inputs` array in the
 -- JSON is ignored for `type:"custom"` controls (works for ADSR etc.,
--- per the doc — feature request for custom on forum #4172). With one
+-- per the doc -- feature request for custom on forum #4172). With one
 -- pot per tile, we use a mode-switch state machine (click toggles
--- NAV ↔ EDIT, double-click mutes the selected step).
+-- NAV <-> EDIT, double-click mutes the selected step).
 --
 -- Per-lane fields:
 --   name              display name (header strip)
 --   color             accent colour (Theme.*)
---   kind              "note" | "pct" | "num" — value formatter
+--   kind              "note" | "pct" | "num" - value formatter
 --   cells             16-entry initial value table (0..127)
 --   paramBase         lowest virtual-param number; step N writes to
 --                     virtual param (paramBase + N) on device 1.
@@ -40,11 +40,11 @@ Theme.require("0.3")
 --                     so external faders / CC can read & write the steps.
 --   potEvId           ev.id that firmware delivers to this tile's pot.
 --                     Find by enabling the device logger and turning
---                     a pot — the "pot tile=N ev.id=X" print line tells
+--                     a pot -- the "pot tile=N ev.id=X" print line tells
 --                     you. For our default 2-tile layout: lane 1 = 6,
 --                     lane 2 = 0. (Legacy alias: encEdit.)
 --   targetLane        which lane this pot operates on (1-based). Default:
---                     2↔1 cross-dispatch for 2 lanes (matches the
+--                     2<->1 cross-dispatch for 2 lanes (matches the
 --                     "top pot drives top tile" feel), else self.
 --   gaugeOrientation  "h" (default, thin bar at bottom of each cell)
 --                     or "v" (thin bar on the right edge of each cell).
@@ -76,7 +76,7 @@ for _, lane in ipairs(lanes) do
   lane.potEvId = lane.potEvId or lane.encEdit
 end
 
--- Per-lane state tables — initialised for every lane declared above so
+-- Per-lane state tables -- initialised for every lane declared above so
 -- adding lane[3] / [4] / ... requires no extra wiring here.
 selectedStep = {}
 dragging     = {}
@@ -89,7 +89,7 @@ for i = 1, #lanes do
   dragging[i]     = nil
   -- Initial mute table: copy from lane.initialMuted if provided, else
   -- start with every step active (empty table). Each entry uses the
-  -- step index as key (1..16) → true to mute.
+  -- step index as key (1..16) -> true to mute.
   muted[i] = {}
   if lanes[i].initialMuted then
     for step, m in pairs(lanes[i].initialMuted) do muted[i][step] = m end
@@ -126,7 +126,7 @@ end
 -- "all 16 parameters share the same overlay list" line of the forum spec).
 -- Otherwise we fall back to the built-in formatters per lane.kind. This
 -- lets a user define arbitrary step lists (scale degrees, drum kit pieces,
--- chord names, syllables…) without changing the widget logic — just
+-- chord names, syllables...) without changing the widget logic -- just
 -- replace lanes[N].overlay in their preset.
 function overlayLabel(overlay, v)
   for _, item in ipairs(overlay) do
@@ -170,7 +170,7 @@ function paintLane(ctrl)
   local b = ctrl:getBounds()
   local W, H = b[WIDTH], b[HEIGHT]
 
-  -- Card surface — matches the design-system look (no rounded corners).
+  -- Card surface -- matches the design-system look (no rounded corners).
   Theme.rect(0, 0, W, H, Theme.SURFACE)
 
   local step = selectedStep[id]
@@ -182,11 +182,11 @@ function paintLane(ctrl)
   -- Subtle accent strip on the left edge marks the lane colour.
   Theme.rect(0, 0, 4, headerH, lane.color)
 
-  -- Lane name (uppercase, dim) — matches modern-adsr/comp-meter style
+  -- Lane name (uppercase, dim) -- matches modern-adsr/comp-meter style
   graphics.setColor(Theme.TEXT_DIM)
   graphics.print(14, 6, lane.name, 9999, LEFT)
 
-  -- Mode pill — small framed indicator (Theme.outline + filled bg when EDIT)
+  -- Mode pill -- small framed indicator (Theme.outline + filled bg when EDIT)
   local pillX = 14 + #lane.name * 6 + 14
   local pillY = 4
   local pillW, pillH = 38, 14
@@ -215,7 +215,7 @@ function paintLane(ctrl)
   -- Hairline separator under header
   Theme.line(0, headerH, W, headerH, Theme.BORDER)
 
-  -- Tiny revision tag, bottom-right corner of header — discreet
+  -- Tiny revision tag, bottom-right corner of header -- discreet
   graphics.setColor(Theme.NEUTRAL_ACCENT)
   graphics.print(W - 26, headerH + 2, "r" .. WIDGET_REV, 9999, LEFT)
 
@@ -226,7 +226,7 @@ function paintLane(ctrl)
   local cellsW = math.floor(W - 20)
   local cellW = stepGeometry(cellsX, cellsW)
 
-  -- Group dividers — short vertical tick between every 4th cell
+  -- Group dividers -- short vertical tick between every 4th cell
   for g = 1, 3 do
     local divX = math.floor(stepX(cellsX, cellsW, g * 4) + cellW + GROUP_GAP_EXTRA / 2)
     local top = math.floor(cellsY + 4)
@@ -244,14 +244,14 @@ function paintLane(ctrl)
     local cv = lane.cells[i] or 0
     local norm = math.max(0, math.min(1, cv / 127))
 
-    -- Background — ELEVATED on selected step, SURFACE in-range, CANVAS OOR
+    -- Background -- ELEVATED on selected step, SURFACE in-range, CANVAS OOR
     local bg = Theme.SURFACE
     if not inRange then bg = Theme.CANVAS
     elseif isActive then bg = Theme.ELEVATED end
     Theme.rect(cx, cellsY, cellW, cellsH, bg)
 
     if inRange then
-      -- Value gauge — bar showing the normalised value. Orientation
+      -- Value gauge -- bar showing the normalised value. Orientation
       -- defaults to "h" (thin horizontal bar at the bottom), "v" puts a
       -- thin vertical bar on the right edge instead. Lane colour when
       -- active, dim variant otherwise. Hidden if muted.
@@ -292,10 +292,10 @@ function paintLane(ctrl)
       graphics.setColor(Theme.NEUTRAL_ACCENT)
       graphics.print(math.floor(cx + cellW / 2 - 3),
                      math.floor(cellsY + cellsH / 2 - 4),
-                     "·", 9999, LEFT)
+                     ".", 9999, LEFT)
     end
 
-    -- Cell outline — bright TEXT on active, BORDER in-range, ELEVATED OOR
+    -- Cell outline -- bright TEXT on active, BORDER in-range, ELEVATED OOR
     local outlineCol = isActive and Theme.TEXT
                        or (inRange and Theme.BORDER or Theme.ELEVATED)
     Theme.outline(cx, cellsY, cellW, cellsH, outlineCol)
@@ -361,7 +361,7 @@ function potLane(ctrl, ev)
   local sourceId = ctrl:getId()
   -- DIAGNOSTIC: log every pot event reaching this tile, before any filter.
   -- Useful when adding a new lane to find which ev.id the firmware
-  -- dispatches to that tile — copy the value into lane.potEvId.
+  -- dispatches to that tile -- copy the value into lane.potEvId.
   print(string.format("pot tile=%d ev.id=%s type=%s delta=%s",
     sourceId, tostring(ev.id), tostring(ev.type), tostring(ev.delta)))
   local sourceLane = lanes[sourceId]
@@ -439,7 +439,7 @@ end
 
 -- ===== External sync via parameterMap.onChange =====
 --
--- Fires every time a Parameter Map entry changes — whether from an
+-- Fires every time a Parameter Map entry changes -- whether from an
 -- external MIDI message, an internal firmware update, or a Lua-driven
 -- parameterMap.set call. We use it to:
 --
@@ -448,7 +448,7 @@ end
 --   2) keep `lane.cells[step]` in sync with the per-step virtual params
 --      (so external automation moves the visible step values).
 --
--- We skip our OWN writes by filtering on `origin == LUA` — otherwise
+-- We skip our OWN writes by filtering on `origin == LUA` -- otherwise
 -- every parameterMap.set in touchLane / potLane would loop back here.
 function parameterMap.onChange(valueObjects, origin, midiValue)
   if origin == LUA then return end

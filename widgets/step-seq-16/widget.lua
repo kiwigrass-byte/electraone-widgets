@@ -1,8 +1,8 @@
--- Widget: 32-Step Sequencer (2 × 16)
+-- Widget: 32-Step Sequencer (2 x 16)
 -- Two parallel 16-step lanes at the same tempo. Line 1 is always live;
 -- line 2 can be enabled/disabled via its own button (muted cells still
 -- show the pattern so you don't lose your work). Transport controls are
--- real on-screen buttons, not knobs — RUN toggles, RESET is momentary.
+-- real on-screen buttons, not knobs -- RUN toggles, RESET is momentary.
 --
 -- Paste lib/theme.lua + lib/primitives/{grid,knob,led}.lua above this
 -- code on the device. The emulator pre-loads them.
@@ -18,7 +18,7 @@ local KNOB_SIZE = 76
 local KNOB_Y = 390
 local KNOB_XS = { 30, 200 }
 
--- Buttons start after the two knobs — compact SSL console-tile size
+-- Buttons start after the two knobs -- compact SSL console-tile size
 local BTN_Y, BTN_H, BTN_W = 410, 56, 140
 local BTN_RUN    = { x = 440, y = BTN_Y, w = BTN_W, h = BTN_H, label = "RUN" }
 local BTN_LINE2  = { x = 610, y = BTN_Y, w = BTN_W, h = BTN_H, label = "LINE 2" }
@@ -27,10 +27,10 @@ local BTN_RESET  = { x = 780, y = BTN_Y, w = BTN_W, h = BTN_H, label = "RESET" }
 -- ===== State =====
 -- 32 velocities: indices 1..16 = row 1, 17..32 = row 2.
 local steps = {
-  -- Row 1 — kick pattern
+  -- Row 1 -- kick pattern
   1.00, 0.00, 0.35, 0.00,   1.00, 0.00, 0.00, 0.45,
   1.00, 0.00, 0.35, 0.00,   1.00, 0.25, 0.50, 0.00,
-  -- Row 2 — snare / offbeats
+  -- Row 2 -- snare / offbeats
   0.00, 0.00, 0.00, 0.00,   1.00, 0.00, 0.30, 0.00,
   0.00, 0.00, 0.00, 0.45,   1.00, 0.00, 0.00, 0.60,
 }
@@ -122,7 +122,7 @@ function paintSeq(control)
   graphics.print(W - 130, 10, string.format("%d BPM", bpm), 9999, LEFT)
   Theme.led(W - 30, 18, running, { color = Theme.POSITIVE, size = 6 })
 
-  -- 2-row grid, 32 cells. Active column highlights both rows — but on
+  -- 2-row grid, 32 cells. Active column highlights both rows -- but on
   -- disabled rows the top-edge strip is suppressed so the "playing" signal
   -- only applies to live lanes.
   Theme.grid(GRID_X, GRID_Y, GRID_W, GRID_H, COLS, ROWS, steps, {
@@ -133,7 +133,7 @@ function paintSeq(control)
     disabledRows = line2Enabled and {} or { [2] = true },
   })
 
-  -- Playhead — bright 2px vertical segments at the active column, one per
+  -- Playhead -- bright 2px vertical segments at the active column, one per
   -- live row. Disabled rows don't get a playhead so the user sees at a
   -- glance that they're not being traversed.
   if running then
@@ -163,7 +163,7 @@ function paintSeq(control)
     color = isDragSwing and Theme.WARNING or Theme.ACCENT,
   })
 
-  -- 3 transport buttons — SSL console-tile style, LED window across the top
+  -- 3 transport buttons -- SSL console-tile style, LED window across the top
   Theme.button(BTN_RUN.x, BTN_RUN.y, BTN_RUN.w, BTN_RUN.h, {
     label = BTN_RUN.label, state = running, color = Theme.POSITIVE,
   })
@@ -176,7 +176,7 @@ function paintSeq(control)
 
   -- Footer hint
   graphics.setColor(Theme.TEXT_DIM)
-  graphics.print(20, 510, "Tap a cell to toggle · drag vertically to set velocity", 9999, LEFT)
+  graphics.print(20, 510, "Tap a cell to toggle . drag vertically to set velocity", 9999, LEFT)
 end
 
 -- ===== Touch =====
@@ -254,7 +254,7 @@ function potSeq(control, potEvent)
 end
 
 -- ===== Timer / transport =====
-function timer.onTick()
+function stepSeqTick()
   local dt = 10
   if resetFlash > 0 then
     resetFlash = resetFlash - dt
@@ -277,7 +277,6 @@ function preset.onLoad()
   seqControl:setPaintCallback(paintSeq)
   seqControl:setTouchCallback(touchSeq)
   seqControl:setPotCallback(potSeq)
-  timer.setPeriod(10)
-  timer.enable()
+  schedule.every(10, stepSeqTick)
   seqControl:repaint()
 end

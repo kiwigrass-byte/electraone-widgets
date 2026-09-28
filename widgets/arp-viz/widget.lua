@@ -1,5 +1,5 @@
 -- Widget: Arpeggiator Visualiser
--- Scrolling piano-roll view of a running arpeggiator — notes slide from
+-- Scrolling piano-roll view of a running arpeggiator -- notes slide from
 -- the right edge (freshly fired) to the left (falling off history). The
 -- arp generates notes internally from a fixed demo chord + rate + pattern
 -- so the widget demos cleanly without any MIDI input; on device you can
@@ -19,15 +19,15 @@ local PATTERN_BTN = { x = 600, y = FOOTER_Y, w = 170, h = 56, label = "" }
 local LED_XY = { x = 820, y = FOOTER_Y + 8 }
 
 -- ===== Arp config =====
--- Chord stays fixed for the demo: C minor 7 (C Eb G Bb) — looks lively
+-- Chord stays fixed for the demo: C minor 7 (C Eb G Bb) -- looks lively
 -- under all four patterns without needing user input.
 local CHORD = { 60, 63, 67, 70 }   -- MIDI note numbers
 local PATTERNS = { "UP", "DOWN", "UP-DN", "RAND" }
 
 -- ===== State =====
-local rate      = 0.45            -- 0..1 → rate knob
-local gate      = 0.6             -- 0..1 → note length as fraction of step
-local octaves   = 0.33            -- 0..1 → 1..4 octaves (actually snap to 1/2/3/4)
+local rate      = 0.45            -- 0..1 -> rate knob
+local gate      = 0.6             -- 0..1 -> note length as fraction of step
+local octaves   = 0.33            -- 0..1 -> 1..4 octaves (actually snap to 1/2/3/4)
 local patternIdx = 1              -- 1..4
 
 local notes = {}                  -- { startMs, endMs, pitch, vel }
@@ -42,7 +42,7 @@ local DRAG_THRESHOLD = 4
 
 local PARAM_RATE, PARAM_GATE, PARAM_OCT, PARAM_PAT = 1, 2, 3, 4
 
--- Visible pitch range — 3 octaves, C3..C6 (48..84)
+-- Visible pitch range -- 3 octaves, C3..C6 (48..84)
 local PITCH_MIN, PITCH_MAX = 48, 84
 local TIME_WINDOW_MS = 3500       -- scroll window (~3.5s)
 
@@ -59,7 +59,7 @@ local function gateMs(stepMs)
 end
 
 local function octaveCount()
-  -- map 0..1 → 1/2/3/4 octaves
+  -- map 0..1 -> 1/2/3/4 octaves
   if octaves < 0.25 then return 1
   elseif octaves < 0.50 then return 2
   elseif octaves < 0.75 then return 3
@@ -142,7 +142,7 @@ function paintArp(control)
   Theme.rect(VIZ_X, VIZ_Y, VIZ_W, VIZ_H, Theme.SURFACE)
   Theme.outline(VIZ_X, VIZ_Y, VIZ_W, VIZ_H, Theme.BORDER)
 
-  -- Horizontal guide lines — every octave. 3 octaves → 2 interior lines.
+  -- Horizontal guide lines -- every octave. 3 octaves -> 2 interior lines.
   graphics.setColor(Theme.ELEVATED)
   local pitchRange = PITCH_MAX - PITCH_MIN
   for octLine = PITCH_MIN + 12, PITCH_MAX - 1, 12 do
@@ -156,7 +156,7 @@ function paintArp(control)
   graphics.drawLine(phX,     VIZ_Y + 1, phX,     VIZ_Y + VIZ_H - 1)
   graphics.drawLine(phX + 1, VIZ_Y + 1, phX + 1, VIZ_Y + VIZ_H - 1)
 
-  -- Notes — piano-roll rectangles. x = right edge minus age-proportional
+  -- Notes -- piano-roll rectangles. x = right edge minus age-proportional
   -- offset; width = duration on screen; y = pitch position; fill colour
   -- varies with age so older notes fade to ACCENT_DIM.
   for _, n in ipairs(notes) do
@@ -169,7 +169,7 @@ function paintArp(control)
       pitchRel = math.max(0, math.min(1, pitchRel))
       local noteH = 8
       local ny = VIZ_Y + VIZ_H - math.floor(VIZ_H * pitchRel) - noteH / 2
-      -- Color: fresh → ACCENT, aging → ACCENT_DIM
+      -- Color: fresh -> ACCENT, aging -> ACCENT_DIM
       local freshness = 1 - ageMs / TIME_WINDOW_MS
       local fc = (freshness > 0.5) and Theme.ACCENT or Theme.ACCENT_DIM
       -- Clip left edge if note extends off-canvas
@@ -271,7 +271,7 @@ function potArp(control, potEvent)
 end
 
 -- ===== Timer =====
-function timer.onTick()
+function arpTick()
   local dt = 20
   currentMs = currentMs + dt
   if ledFlash > 0 then ledFlash = ledFlash - dt end
@@ -306,7 +306,6 @@ function preset.onLoad()
   arpControl:setTouchCallback(touchArp)
   arpControl:setPotCallback(potArp)
   math.randomseed(0)   -- stable RAND pattern for reproducible screenshots
-  timer.setPeriod(20)
-  timer.enable()
+  schedule.every(20, arpTick)
   arpControl:repaint()
 end

@@ -1,5 +1,5 @@
 -- Widget: MIDI multi env
--- MIDI multi-env — 16-point envelope controller
+-- MIDI multi-env -- 16-point envelope controller
 -- Original author: Thomas Moravansky (Electra One co-founder)
 -- Source: https://app.electra.one/preset/dcm643vSk28wT0BctHbf
 -- Imported: 2026-04-15 from Firestore. License at source: none specified.

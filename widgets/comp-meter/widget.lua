@@ -59,7 +59,7 @@ local function msStr(v, maxMs)
   return string.format("%.2fs", val / 1000)
 end
 
--- Simulated input: slow envelope × faster modulation. Visually engaging,
+-- Simulated input: slow envelope x faster modulation. Visually engaging,
 -- produces natural-looking GR waveform.
 local function simulateInput()
   t = t + 0.06
@@ -146,7 +146,7 @@ function paintComp(control)
   graphics.drawLine(METER_XS[1] - 6, thY + 1, METER_XS[1] + METER_W + 6, thY + 1)
   Theme.text(METER_XS[1] + METER_W + 10, thY - 6, threshDbStr(), Theme.WARNING)
 
-  -- GR meter (inverted — fills from the top, downward, showing reduction)
+  -- GR meter (inverted -- fills from the top, downward, showing reduction)
   Theme.meter(METER_XS[2], METER_Y, METER_W, METER_H, gr * 2, {
     orientation = "v",
     label = "GR",
@@ -218,7 +218,7 @@ function potComp(control, potEvent)
 end
 
 -- ===== Timer (animates the simulated input + GR) =====
-function timer.onTick()
+function compMeterTick()
   simulateInput()
   computeGR()
   compControl:repaint()
@@ -229,7 +229,6 @@ function preset.onLoad()
   compControl:setPaintCallback(paintComp)
   compControl:setTouchCallback(touchComp)
   compControl:setPotCallback(potComp)
-  timer.setPeriod(40)  -- 25 Hz — smooth without burning CPU
-  timer.enable()
+  schedule.every(40, compMeterTick)   -- 25 Hz, smooth without burning CPU
   compControl:repaint()
 end

@@ -1,5 +1,5 @@
 -- Widget: [Lua] XY Pad
--- [Lua] XY Pad — official demo
+-- [Lua] XY Pad -- official demo
 -- Original author: Martin Pavlas (Electra One creator)
 -- Source: https://app.electra.one/preset/QIatK17htTqLzhkHRnp4
 -- Imported: 2026-04-15 from Firestore. License at source: none specified.

@@ -1,7 +1,7 @@
 -- Widget: Spatial Pan
 -- Top-down ambisonic-style pan view. A circular "room" with four cardinal
 -- markers (FRONT / RIGHT / BACK / LEFT); the source position is a filled
--- dot inside the circle. Drag anywhere in the circle to move the source —
+-- dot inside the circle. Drag anywhere in the circle to move the source --
 -- azimuth and distance update together. Pots 1/2 control azimuth/distance
 -- independently for precise tweaks.
 --
@@ -21,7 +21,7 @@ local RIGHT_W = 376
 
 -- ===== State =====
 -- source position in the normalised unit-circle frame. x right, y "forward"
--- so azimuth 0° = (0, 1), 90° (right) = (1, 0), 180° = (0, -1).
+-- so azimuth 0deg = (0, 1), 90deg (right) = (1, 0), 180deg = (0, -1).
 local srcX, srcY = 0, 0.35   -- start slightly in front, dead centre L/R
 local dragging = false
 
@@ -42,7 +42,7 @@ local function distance()
 end
 
 -- Equal-power pan: pan = x / max(0.0001, d) gives [-1, +1] across the arc.
--- gL = cos((pan+1)·π/4), gR = sin((pan+1)·π/4). Both in [0, 1].
+-- gL = cos((pan+1).pi/4), gR = sin((pan+1).pi/4). Both in [0, 1].
 local function panGains()
   local d = distance()
   local pan = (d < 1e-4) and 0 or math.max(-1, math.min(1, srcX / math.max(d, 0.5)))
@@ -122,7 +122,7 @@ local function paintPanCircle()
   graphics.print(CIRCLE_CX + r + 6,  CIRCLE_CY - 6,  "R", 9999, LEFT)
   graphics.print(CIRCLE_CX - r - 14, CIRCLE_CY - 6,  "L", 9999, LEFT)
 
-  -- Source position: axes x right, y forward → screen x=cx+x·r, y=cy-y·r
+  -- Source position: axes x right, y forward -> screen x=cx+x.r, y=cy-y.r
   local sx = CIRCLE_CX + math.floor(srcX * r)
   local sy = CIRCLE_CY - math.floor(srcY * r)
 
@@ -244,7 +244,7 @@ function potPan(control, potEvent)
   if potEvent.type ~= MOVE then return end
   local idx = potEvent.id
   if idx == 1 then
-    local az = azimuthDeg() + potEvent.delta * 2          -- 2° per detent
+    local az = azimuthDeg() + potEvent.delta * 2          -- 2deg per detent
     if az < 0 then az = az + 360 end
     az = az % 360
     local rad = az * math.pi / 180

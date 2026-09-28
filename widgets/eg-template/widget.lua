@@ -1,5 +1,5 @@
 -- Widget: EG Template (7-variant Envelope Generator)
--- Original author: NewIgnis (Ignace Vanbiervliet) — 2026
+-- Original author: NewIgnis (Ignace Vanbiervliet) -- 2026
 -- Source: https://app.electra.one/preset/HbynnPgMY6ei48yqOlrw
 -- Forum: https://forum.electra.one/t/custom-control-for-envelopes-anyone/4169
 -- Imported: 2026-04-15 via Firestore `projects` collection.

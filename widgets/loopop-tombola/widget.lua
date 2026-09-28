@@ -1,5 +1,5 @@
 -- Widget: Loopop's Tombola
--- Loopop's Tombola — physics ball demo
+-- Loopop's Tombola - physics ball demo
 -- Original author: Ziv Eliraz (Loopop)
 -- Source: https://app.electra.one/preset/eZBSxDFKpnULd4e0we97
 -- Imported: 2026-04-15 from Firestore. License at source: none specified.
@@ -607,8 +607,7 @@ function preset.onLoad()
     end
     
     -- Start timer
-    timer.setPeriod(REFRESH_RATE)
-    timer.enable()
+    schedule.every(REFRESH_RATE, tombolaTick)
 end
 
 -- Randomize to a new scale
@@ -671,24 +670,24 @@ function parameterMap.onChange(valueObjects, origin, midiValue)
         -- Handle CC7 messages (MIDI CC 11, 12, 13, 14, 101)
         if type == PT_CC7 then
             if parameterNumber == 11 then
-                -- CC11: Gravity (0-127 → 0 to 0.5)
+                -- CC11: Gravity (0-127 -> 0 to 0.5)
                 GRAVITY = (value / 127) * 0.5
                 print("Set GRAVITY to " .. GRAVITY)
             elseif parameterNumber == 12 then
-                -- CC12: Bounce (0-127 → 0.3 to 1.0)
+                -- CC12: Bounce (0-127 -> 0.3 to 1.0)
                 WALL_BOUNCE = 0.3 + (value / 127) * 0.7
                 print("Set WALL_BOUNCE to " .. WALL_BOUNCE)
             elseif parameterNumber == 13 then
-                -- CC13: Rotation Speed (0-127 → -0.2 to 0.2) - 10x faster!
+                -- CC13: Rotation Speed (0-127 -> -0.2 to 0.2) - 10x faster!
                 -- 0 = fast reverse, 64 = stop, 127 = fast forward
                 ROTATION_SPEED = ((value / 127) - 0.5) * 0.4
                 print("Set ROTATION_SPEED to " .. ROTATION_SPEED)
             elseif parameterNumber == 14 then
-                -- CC14: Spawn Rate (0-127 → 0.2 to 5.0)
+                -- CC14: Spawn Rate (0-127 -> 0.2 to 5.0)
                 SPAWN_RATE_MULT = 0.2 + (value / 127) * 4.8
                 print("Set SPAWN_RATE_MULT to " .. SPAWN_RATE_MULT)
             elseif parameterNumber == 101 then
-                -- CC101: Number of vertices (0-127 → 3 to 12 sides)
+                -- CC101: Number of vertices (0-127 -> 3 to 12 sides)
                 -- Map: 0-12=3, 13-26=4, 27-40=5, etc.
                 local newSides = 3 + math.floor((value / 127) * 10)
                 newSides = math.min(12, math.max(3, newSides))  -- Clamp to 3-12
@@ -812,7 +811,7 @@ end
 
 -- Timer callback
 --
-function timer.onTick()
+function tombolaTick()
     mainControl.frameCount = mainControl.frameCount + 1
     updatePhysics()
     mainControl:repaint()

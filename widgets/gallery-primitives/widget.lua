@@ -1,11 +1,11 @@
 -- Widget: Primitives Gallery
--- Dev reference — renders every primitive so the API can be QA'd visually.
+-- Dev reference -- renders every primitive so the API can be QA'd visually.
 
 Theme.require("0.3")
 
 local c = controls.get(1)
 
--- Sample envelope points for the graph showcase (AD → S → R curve)
+-- Sample envelope points for the graph showcase (AD -> S -> R curve)
 local ENV_POINTS = {
   {0.00, 0.00}, {0.12, 1.00}, {0.30, 0.70}, {0.70, 0.70}, {1.00, 0.00}
 }
@@ -16,7 +16,7 @@ for i = 0, 40 do
   LFO_POINTS[#LFO_POINTS + 1] = { i / 40, 0.5 + 0.4 * math.sin(i / 40 * math.pi * 4) }
 end
 
--- Sample step-sequencer cells (8 steps × 2 rows, velocity 0..1)
+-- Sample step-sequencer cells (8 steps x 2 rows, velocity 0..1)
 local STEP_CELLS = {
   -- row 1 (kick)
   1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
@@ -30,7 +30,7 @@ function paintGallery(control)
 
   Theme.clear(W, H)
 
-  Theme.text(20, 10, "PRIMITIVES v0.3 — knob · bar · led · meter · slider · readout · graph · grid", Theme.TEXT)
+  Theme.text(20, 10, "PRIMITIVES v0.3 - knob . bar . led . meter . slider . readout . graph . grid", Theme.TEXT)
   Theme.line(20, 28, W - 20, 28, Theme.BORDER)
 
   ------------------------------------------------------------------
@@ -70,17 +70,17 @@ function paintGallery(control)
   ------------------------------------------------------------------
   -- Row 3: graph showcase
   ------------------------------------------------------------------
-  Theme.text(20, 248, "GRAPH — envelope + LFO traces", Theme.TEXT_DIM)
+  Theme.text(20, 248, "GRAPH - envelope + LFO traces", Theme.TEXT_DIM)
   Theme.graph( 20, 266, 240, 88, ENV_POINTS, { color = Theme.ACCENT, fill = true, grid = 4 })
   Theme.text(260, 356, "ADSR", Theme.TEXT_DIM)
 
   Theme.graph(320, 266, 340, 88, LFO_POINTS, { color = Theme.INFO, grid = 4 })
-  Theme.text(660, 356, "LFO sine × 4 cycles", Theme.TEXT_DIM)
+  Theme.text(660, 356, "LFO sine x 4 cycles", Theme.TEXT_DIM)
 
   ------------------------------------------------------------------
   -- Row 4: grid showcase (step seq)
   ------------------------------------------------------------------
-  Theme.text(20, 380, "GRID — step sequencer (8 steps × 2 rows, active step 5)", Theme.TEXT_DIM)
+  Theme.text(20, 380, "GRID - step sequencer (8 steps x 2 rows, active step 5)", Theme.TEXT_DIM)
   Theme.grid(20, 398, 640, 60, 8, 2, STEP_CELLS, { active = 5 })
 
   -- Right side: composition card using everything at once
