@@ -31,7 +31,7 @@ local panControl = controls.get(1)
 
 -- ===== Derived values =====
 local function azimuthDeg()
-  -- atan2(x, y) with y = "forward" gives 0° at front, increasing clockwise
+  -- atan2(x, y) with y = "forward" gives 0 deg at front, increasing clockwise
   local az = math.atan(srcX, srcY) * 180 / math.pi
   if az < 0 then az = az + 360 end
   return az
@@ -162,7 +162,7 @@ local function paintRightPanel()
   -- Azimuth readout (big)
   local az = azimuthDeg()
   graphics.setColor(Theme.ACCENT)
-  graphics.print(x + 16, y + 36, string.format("%3d°", math.floor(az + 0.5)), 9999, LEFT)
+  graphics.print(x + 16, y + 36, string.format("%3d deg", math.floor(az + 0.5)), 9999, LEFT)
 
   -- Distance readout
   graphics.setColor(Theme.TEXT_DIM)

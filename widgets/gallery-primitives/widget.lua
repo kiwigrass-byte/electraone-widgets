@@ -63,7 +63,7 @@ function paintGallery(control)
 
   -- Readouts cluster
   Theme.readout(720, 60, { label = "BPM",    value = "128",    unit = "",    color = Theme.ACCENT })
-  Theme.readout(820, 60, { label = "KEY",    value = "A♭ min", color = Theme.TEXT })
+  Theme.readout(820, 60, { label = "KEY",    value = "Ab min", color = Theme.TEXT })
   Theme.readout(720, 110, { label = "TIME",   value = "4/4",   color = Theme.TEXT_DIM })
   Theme.readout(820, 110, { label = "OUTPUT", value = "-6.0",  unit = "dB", color = Theme.POSITIVE })
 
