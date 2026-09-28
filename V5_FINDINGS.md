@@ -55,6 +55,11 @@ Enumerated from the device:
 `schedule.stats()` → `{capacity=32, errors=0, pending=0, ran=0, whenNotes=0,
 worstOverrun=0}`. So **32 concurrent jobs**, with error and overrun counters.
 
+Measured on device: two jobs armed at 50 ms both ticked 38 times over two
+seconds, `pending` stayed at 2, no interference. Conversely `timer.onTick` is a
+single field -- assigning it twice silently keeps the last one, so two animated
+widgets could not share a preset before.
+
 ## 4. `timer` is NOT removed in v5
 
 Contrary to what the beta thread implies, the whole `timer` table is still
