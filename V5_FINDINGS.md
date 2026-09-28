@@ -46,8 +46,8 @@ Enumerated from the device:
 | Call | Behaviour (observed) |
 |---|---|
 | `schedule.after(ms, fn)` | one-shot |
-| `schedule.every(ms, fn)` | repeating; returns a **number** handle |
-| `schedule.cancel(handle)` | returns `true` |
+| `schedule.every(ms, fn)` | repeating; returns a **number** handle; first fire after one period, **not immediately** |
+| `schedule.cancel(handle)` | `true` for a live job, `false` for an unknown or already-cancelled handle |
 | `schedule.now()` | milliseconds since boot |
 | `schedule.stats()` | see below |
 | `schedule.whenNotes(...)` | **undocumented, signature unknown** |
@@ -138,3 +138,12 @@ its own named callback (`cubeLfoTick`, `stepSeqTick`, `arpTick`, …) instead of
 a single shared global. `send-lfo`, which starts and stops at runtime, now
 keeps the handle and uses `schedule.cancel`. No `timer.*` call remains in the
 library. All 20 widgets syntax-check on 5.0.0f.
+
+## 10. First paint precedes the first tick
+
+Because `schedule.every` does not fire immediately, a preset's first paint
+happens before any job has run. Two widgets (cube-lfo, mini-cube-lfo) computed
+their geometry only inside the tick and indexed an empty table on first paint.
+Our emulator used to fire the tick immediately and masked this. Fixed in the
+widgets by computing once in `preset.onLoad`; the emulator now reproduces the
+device's timing, so this class of bug shows up before hardware.

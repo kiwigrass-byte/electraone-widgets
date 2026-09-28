@@ -124,6 +124,9 @@ function preset.onLoad()
     -- Register the paint callback
     cubeControl:setPaintCallback(paintCubeControl)
 
+    -- Project once so the first paint, which precedes the first tick, has data
+    cubeControl:update()
+
     -- Drive the animation from the scheduler
     schedule.every(REFRESH_RATE, cubeLfoTick)
 end

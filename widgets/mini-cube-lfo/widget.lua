@@ -118,6 +118,9 @@ function preset.onLoad()
     cubeControl:setPaintCallback(paintCubeControl)
 
     -- Configure and enable the timer
+    -- Project once so the first paint, which precedes the first tick, has data
+    cubeControl:update()
+
     schedule.every(REFRESH_RATE, miniCubeTick)
 
     uiControls.cube.stepX = 0.01

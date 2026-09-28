@@ -220,7 +220,7 @@ function paintMeter(control)
 
   -- Footer hint
   graphics.setColor(Theme.TEXT_DIM)
-  graphics.print(20, 510, "MODE cycles target . RESET zeros max / integrated . HOLD freezes true-peak", 9999, LEFT)
+  graphics.print(20, 510, "MODE cycles target - RESET zeros max / integrated - HOLD freezes true-peak", 9999, LEFT)
 end
 
 -- ===== Touch =====

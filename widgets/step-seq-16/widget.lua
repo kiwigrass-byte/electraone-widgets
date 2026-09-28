@@ -176,7 +176,7 @@ function paintSeq(control)
 
   -- Footer hint
   graphics.setColor(Theme.TEXT_DIM)
-  graphics.print(20, 510, "Tap a cell to toggle . drag vertically to set velocity", 9999, LEFT)
+  graphics.print(20, 510, "Tap a cell to toggle, drag vertically to set velocity", 9999, LEFT)
 end
 
 -- ===== Touch =====

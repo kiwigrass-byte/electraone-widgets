@@ -30,7 +30,7 @@ function paintGallery(control)
 
   Theme.clear(W, H)
 
-  Theme.text(20, 10, "PRIMITIVES v0.3 - knob . bar . led . meter . slider . readout . graph . grid", Theme.TEXT)
+  Theme.text(20, 10, "PRIMITIVES v0.3 - knob, bar, led, meter, slider, readout, graph, grid", Theme.TEXT)
   Theme.line(20, 28, W - 20, 28, Theme.BORDER)
 
   ------------------------------------------------------------------

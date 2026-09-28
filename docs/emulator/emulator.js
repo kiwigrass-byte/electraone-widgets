@@ -602,43 +602,44 @@ function setupEnv(L, stage) {
   });
   lua.lua_setglobal(L, to_luastring("events"));
 
-  // timer — provides actual tick loop so animated widgets run
-  stage.timerState = { intervalId: null, periodMs: 20 };
-  const doTick = () => {
-    lua.lua_getglobal(L, to_luastring("timer"));
-    lua.lua_getfield(L, -1, to_luastring("onTick"));
-    if (lua.lua_isfunction(L, -1)) {
-      if (lua.lua_pcall(L, 0, 0, 0) !== 0) {
-        logMsg("timer.onTick err: " + safeTostring(L, -1), "err");
-        lua.lua_pop(L, 1);
-      }
-    } else {
-      lua.lua_pop(L, 1);
-    }
-    lua.lua_pop(L, 1);
-    stage.paintAll();
+  // schedule -- the firmware 5 scheduler. Semantics measured on a 5.0.0f MK2:
+  // every() first fires after one period (not immediately), after() fires
+  // once, cancel() returns true for a live job and false otherwise, and
+  // capacity is 32 concurrent jobs.
+  const SCHEDULE_CAPACITY = 32;
+  const jobs = new Map();          // handle -> { id, repeat }
+  let nextHandle = 1;
+  const startedAt = performance.now();
+  const runJob = (fn) => { fn(); stage.paintAll(); };
+  const arm = (ms, fn, repeat) => {
+    if (typeof fn !== "function") { logMsg("schedule: callback is not a function", "err"); return null; }
+    if (jobs.size >= SCHEDULE_CAPACITY) { logMsg("schedule: capacity reached", "err"); return null; }
+    const handle = nextHandle++;
+    const period = Math.max(1, ms | 0);
+    const id = repeat
+      ? setInterval(() => runJob(fn), period)
+      : setTimeout(() => { jobs.delete(handle); runJob(fn); }, period);
+    jobs.set(handle, { id, repeat });
+    return handle;
   };
-  const startTimer = () => {
-    if (stage.timerState.intervalId) return;
-    doTick();   // fire once immediately so first paint has valid state
-    stage.timerState.intervalId = setInterval(doTick, stage.timerState.periodMs);
+  const cancel = (handle) => {
+    const job = jobs.get(handle);
+    if (!job) return false;
+    (job.repeat ? clearInterval : clearTimeout)(job.id);
+    jobs.delete(handle);
+    return true;
   };
-  const stopTimer = () => {
-    if (stage.timerState.intervalId) {
-      clearInterval(stage.timerState.intervalId);
-      stage.timerState.intervalId = null;
-    }
-  };
-  // Keep a handle so loadWidget can stop previous timer on reload
-  stage._stopTimer = stopTimer;
+  // loadWidget cancels every job of the previous widget on reload
+  stage._cancelJobs = () => { for (const h of [...jobs.keys()]) cancel(h); };
 
   pushObject(L, {
-    enable: () => startTimer(),
-    disable: () => stopTimer(),
-    setPeriod: (ms) => { stage.timerState.periodMs = Math.max(10, ms|0); if (stage.timerState.intervalId) { stopTimer(); startTimer(); } },
-    setBpm: (bpm) => { stage.timerState.periodMs = Math.max(10, Math.round(60000 / (bpm * 24))); },
+    every: (ms, fn) => arm(ms, fn, true),
+    after: (ms, fn) => arm(ms, fn, false),
+    cancel: (handle) => cancel(handle),
+    now: () => Math.floor(performance.now() - startedAt),
+    stats: () => ({ capacity: SCHEDULE_CAPACITY, pending: jobs.size }),
   });
-  lua.lua_setglobal(L, to_luastring("timer"));
+  lua.lua_setglobal(L, to_luastring("schedule"));
 
   // preset table
   lua.lua_createtable(L, 0, 0);
@@ -1148,9 +1149,9 @@ async function loadWidget(slug) {
   logMsg(`Loading widget: ${slug}`, "info");
   document.getElementById("status").textContent = "…";
 
-  // Stop previous timer if any
-  if (window.__currentStage && window.__currentStage._stopTimer) {
-    window.__currentStage._stopTimer();
+  // Cancel the previous widget's scheduled jobs
+  if (window.__currentStage && window.__currentStage._cancelJobs) {
+    window.__currentStage._cancelJobs();
   }
   // Clear previous interactive overlays
   document.querySelectorAll(".native-overlay").forEach(n => n.remove());
