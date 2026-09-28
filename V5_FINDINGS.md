@@ -147,3 +147,22 @@ their geometry only inside the tick and indexed an empty table on first paint.
 Our emulator used to fire the tick immediately and masked this. Fixed in the
 widgets by computing once in `preset.onLoad`; the emulator now reproduces the
 device's timing, so this class of bug shows up before hardware.
+
+## 11. Control API on 5.0.0f
+
+Methods on a control, enumerated from the device (`getmetatable(controls.get(1))`):
+
+`cancelOverride, getBounds, getColor, getControlSetId, getFont, getId, getMode,
+getName, getOverride, getPageId, getPot, getRect, getSlot, getType, getValue,
+getValueIds, getValues, getVariant, isGroup, isVisible, print, repaint,
+setBounds, setColor, setFont, setName, setOverride, setOverrideEnabled,
+setPaintCallback, setPot, setPotCallback, setPotTouchCallback, setRect,
+setSlot, setSwitchCallback, setVariant, setVisible, toTable, update`
+
+Not in our 4.x API distillation: `getControlSetId, getFont, getMode,
+getOverride, getPageId, getPot, getRect, getSlot, isGroup, setFont,
+setOverride, setOverrideEnabled, setPotTouchCallback, setRect,
+setSwitchCallback, toTable` (some may simply have been undocumented in 4.x).
+
+Open question, untested: `setPot` is still singular, which suggests custom
+tiles remain limited to one pot each. Needs a real multi-pot preset to settle.
